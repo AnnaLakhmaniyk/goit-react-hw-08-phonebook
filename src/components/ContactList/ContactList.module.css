@@ -1,0 +1,25 @@
+.list{
+ width: 400px;
+}
+
+.item{
+display: flex;
+justify-content: space-between;
+align-items: center;
+
+margin-bottom: 5px;
+font-size: 20px;
+ font-weight: 500;
+}
+.button{
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+    width: 25%;
+    height: 25px;
+}
+.button:hover,
+.button:focus{
+    background-color: brown;
+    color: aliceblue;
+}

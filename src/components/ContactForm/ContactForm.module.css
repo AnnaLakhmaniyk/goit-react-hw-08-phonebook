@@ -19,3 +19,8 @@ margin-top: 20px;
 border-radius: 5px;
 width: 25%;
 }
+.button:hover,
+.button:focus {
+    background-color: brown;
+    color: aliceblue;
+}
