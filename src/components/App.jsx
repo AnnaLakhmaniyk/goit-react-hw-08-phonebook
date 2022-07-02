@@ -42,7 +42,21 @@ class App extends React.Component {
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
+  componentDidMount() {
+    const contact = localStorage.getItem('contact');
+    const contactPrev = JSON.parse(contact);
+    if (contactPrev) {
+      this.setState({ contacts: contactPrev });
+    }
 
+    console.log(contactPrev);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contact', JSON.stringify(this.state.contacts));
+    }
+  }
   render() {
     return (
       <div className="section">
