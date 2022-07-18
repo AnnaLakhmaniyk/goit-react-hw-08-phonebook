@@ -19,7 +19,6 @@ function App() {
     if (!contacts) {
       return;
     }
-
     const normalizedFilter = filter.toLowerCase();
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)

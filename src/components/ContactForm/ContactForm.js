@@ -3,6 +3,7 @@ import { useCreateContactMutation } from 'redux/contactsApi';
 import { nanoid } from 'nanoid';
 import { toast } from 'react-toastify';
 import { FaPhoneAlt } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 import s from './ContactForm.module.css';
 
 const ContactForm = ({ contacts }) => {
@@ -79,5 +80,7 @@ const ContactForm = ({ contacts }) => {
     </form>
   );
 };
-
+ContactForm.propTypes = {
+  contacts: PropTypes.arrayOf(PropTypes.object),
+};
 export default ContactForm;
