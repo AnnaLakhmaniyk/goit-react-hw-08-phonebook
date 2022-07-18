@@ -16,5 +16,7 @@ code {
 
 .section {
   margin: 0 auto;
-  padding: 30px;
+  padding: 40px;
+  display: flex;
+  justify-content: space-around;
 }
