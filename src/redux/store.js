@@ -1,35 +1,33 @@
 import { configureStore } from '@reduxjs/toolkit';
-import redusers from './contacts/contacts-reducer';
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
-const persistConfig = {
-  key: 'items',
-  storage,
-  blacklist: ['filter'],
-};
+import { contactApi } from './contactsApi';
 
 export const store = configureStore({
   reducer: {
-    contact: persistReducer(persistConfig, redusers),
+    [contactApi.reducerPath]: contactApi.reducer,
   },
-
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
-  devTools: process.env.NODE_ENV === 'development',
+    getDefaultMiddleware().concat(contactApi.middleware),
 });
+setupListeners(store.dispatch);
 
-export const persistor = persistStore(store);
+//
+// // Or from '@reduxjs/toolkit/query/react'
+// import { setupListeners } from '@reduxjs/toolkit/query';
+// import { pokemonApi } from './services/pokemon';
+
+// export const store = configureStore({
+//   reducer: {
+//     // Add the generated reducer as a specific top-level slice
+//     [pokemonApi.reducerPath]: pokemonApi.reducer,
+//   },
+//   // Adding the api middleware enables caching, invalidation, polling,
+//   // and other useful features of `rtk-query`.
+//   middleware: getDefaultMiddleware =>
+//     getDefaultMiddleware().concat(pokemonApi.middleware),
+// });
+
+// // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
+// // see `setupListeners` docs - takes an optional callback as the 2nd arg for customization
+// setupListeners(store.dispatch);
