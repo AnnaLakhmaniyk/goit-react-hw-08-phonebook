@@ -1,5 +1,7 @@
 import { useDeleteContactMutation } from 'redux/contactsApi';
 import PropTypes from 'prop-types';
+import { FaTrashAlt } from 'react-icons/fa';
+
 import s from './ContactList.module.css';
 
 function ContactList({ contacts }) {
@@ -17,7 +19,7 @@ function ContactList({ contacts }) {
             className={s.button}
             onClick={() => deleteContact(id)}
           >
-            Delete
+            Delete <FaTrashAlt size="15" fill="rgb(25, 22, 22)" />
           </button>
         </li>
       ))}
