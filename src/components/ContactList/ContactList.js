@@ -1,26 +1,21 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'redux/contacts/contacts-actions';
-import { getFilteredContacts } from 'redux/contacts/contacts-selectors';
+import { useDeleteContactMutation } from 'redux/contactsApi';
+import PropTypes from 'prop-types';
 import s from './ContactList.module.css';
 
-function ContactList() {
-  const contacts = useSelector(getFilteredContacts);
-  const dispatch = useDispatch();
+function ContactList({ contacts }) {
+  const [deleteContact] = useDeleteContactMutation();
 
-  const onDeleteContact = id => {
-    return dispatch(deleteContact(id));
-  };
   return (
     <ul className={s.list}>
-      {contacts.map(({ id, name, number }) => (
+      {contacts.map(({ id, name, phone }) => (
         <li key={id} className={s.item}>
           <p className={s.text}>
-            {name}:{number}
+            {name}:{phone}
           </p>
           <button
             type="button"
             className={s.button}
-            onClick={() => onDeleteContact(id)}
+            onClick={() => deleteContact(id)}
           >
             Delete
           </button>
@@ -29,5 +24,14 @@ function ContactList() {
     </ul>
   );
 }
+ContactList.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      phone: PropTypes.string.isRequired,
+    })
+  ),
+};
 
 export default ContactList;
