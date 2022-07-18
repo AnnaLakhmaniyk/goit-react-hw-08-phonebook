@@ -1,16 +1,14 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contacts/contacts-actions';
-import { getContacts } from 'redux/contacts/contacts-selectors';
+import { useCreateContactMutation } from 'redux/contactsApi';
 import { nanoid } from 'nanoid';
+import PropTypes from 'prop-types';
 import s from './ContactForm.module.css';
 
-const ContactForm = () => {
+const ContactForm = ({ contacts }) => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
+  const [createContact, { isLoading }] = useCreateContactMutation();
   const keyEl = nanoid();
-  const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
 
   const handleChange = evt => {
     const { name, value } = evt.target;
@@ -20,7 +18,7 @@ const ContactForm = () => {
         setName(value);
         break;
       case 'number':
-        setNumber(value);
+        setPhone(value);
         break;
       default:
         break;
@@ -28,19 +26,19 @@ const ContactForm = () => {
   };
   const reset = () => {
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    const contactEl = { id: nanoid(), name, number };
+    const contactEl = { name, phone };
     if (contacts.some(contact => contact.name === contactEl.name)) {
       alert(`${contactEl.name} is already in contacts`);
       reset();
       return;
     }
+    createContact(contactEl);
 
-    dispatch(addContact(contactEl));
     reset();
   };
 
@@ -69,16 +67,17 @@ const ContactForm = () => {
         id={keyEl}
         type="tel"
         name="number"
-        value={number}
+        value={phone}
         pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         required
       />
-      <button type="submit" className={s.button}>
+      <button type="submit" className={s.button} disabled={isLoading}>
         Add contact
       </button>
     </form>
   );
 };
+ContactForm.propTypes = { contacts: PropTypes.arrayOf };
 
 export default ContactForm;
