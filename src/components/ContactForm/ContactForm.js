@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useCreateContactMutation } from 'redux/contactsApi';
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import { FaPhoneAlt } from 'react-icons/fa';
 import s from './ContactForm.module.css';
 
 const ContactForm = ({ contacts }) => {
@@ -33,7 +34,7 @@ const ContactForm = ({ contacts }) => {
     evt.preventDefault();
     const contactEl = { name, phone };
     if (contacts.some(contact => contact.name === contactEl.name)) {
-      alert(`${contactEl.name} is already in contacts`);
+      toast.error(`${contactEl.name} is already in contacts`);
       reset();
       return;
     }
@@ -73,11 +74,10 @@ const ContactForm = ({ contacts }) => {
         required
       />
       <button type="submit" className={s.button} disabled={isLoading}>
-        Add contact
+        <FaPhoneAlt size="15" fill="rgb(25, 22, 22)" /> Add contact
       </button>
     </form>
   );
 };
-ContactForm.propTypes = { contacts: PropTypes.arrayOf };
 
 export default ContactForm;
