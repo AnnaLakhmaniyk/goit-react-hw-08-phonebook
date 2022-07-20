@@ -1,38 +1,24 @@
 import React from 'react';
-import { useGetContactQuery } from 'redux/contactsApi';
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getLoading } from 'redux/contacts/contacts-selectors';
 import ContactForm from 'components/ContactForm/ContactForm';
 import ContactList from 'components/ContactList/ContactList';
 import ContactFilter from 'components/ContactFilter/ContactFilter';
 import Loader from 'components/Loder/Loader';
 
 function ContactView() {
-  const [filter, setFilter] = useState('');
-  const { data: contacts, isFetching } = useGetContactQuery();
-  const changeFilter = evt => {
-    setFilter(evt.currentTarget.value);
-  };
-  const filteredContacts = () => {
-    if (!contacts) {
-      return;
-    }
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-
+  const isLoadingTodos = useSelector(getLoading);
   return (
     <div className="section">
-      {isFetching && <Loader />}
+      {isLoadingTodos && <Loader />}
       <div>
         <h1>Phonebook</h1>
-        <ContactForm contacts={contacts} />
+        <ContactForm />
       </div>
       <div>
         <h2>Contacts</h2>
-        <ContactFilter onChange={changeFilter} />
-        {contacts && <ContactList contacts={filteredContacts()} />}
+        <ContactFilter />
+        <ContactList />
       </div>
     </div>
   );
