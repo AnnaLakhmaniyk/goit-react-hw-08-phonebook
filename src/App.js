@@ -1,6 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
+import { fetchCurrentUser } from 'redux/auth/auth-operations';
 import 'react-toastify/dist/ReactToastify.css';
 import AppBar from 'components/AppBar/AppBar';
 
@@ -10,6 +13,11 @@ const RegisterView = lazy(() => import('vievs/RegisterView'));
 const LoginView = lazy(() => import('vievs/LoginView'));
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCurrentUser());
+  }, [dispatch]);
   return (
     <div>
       <Suspense>
