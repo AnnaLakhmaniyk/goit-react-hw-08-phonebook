@@ -4,15 +4,16 @@ import { toast } from 'react-toastify';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { createContact } from 'redux/contacts/contacts-operation';
-import { getContacts } from 'redux/contacts/contacts-selectors';
+
+// import { getContacts } from 'redux/contacts/contacts-selectors';
 
 import s from './ContactForm.module.css';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [number, setNumber] = useState('');
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(state => state.contact.items);
   const keyEl = nanoid();
 
   const handleChange = evt => {
@@ -23,7 +24,7 @@ const ContactForm = () => {
         setName(value);
         break;
       case 'number':
-        setPhone(value);
+        setNumber(value);
         break;
       default:
         break;
@@ -31,17 +32,18 @@ const ContactForm = () => {
   };
   const reset = () => {
     setName('');
-    setPhone('');
+    setNumber('');
   };
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    const contactEl = { name, phone };
-    if (contacts.some(contact => contact.name === contactEl.name)) {
+    const contactEl = { name, number };
+    if (contacts?.some(contact => contact.name === contactEl.name)) {
       toast.error(`${contactEl.name} is already in contacts`);
       reset();
       return;
     }
+
     dispatch(createContact(contactEl));
 
     reset();
@@ -72,7 +74,7 @@ const ContactForm = () => {
         id={keyEl}
         type="tel"
         name="number"
-        value={phone}
+        value={number}
         pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         required
