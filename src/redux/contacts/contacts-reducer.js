@@ -9,13 +9,11 @@ const items = createReducer([], {
   [deleteContact.fulfilled]: (state, { payload }) =>
     state.filter(({ id }) => id !== payload),
 
-  [createContact.fulfilled]: (state, { payload }) => {
-    return [...state, payload];
-  },
+  [createContact.fulfilled]: (state, { payload }) => [...state, payload],
 });
 
 const filter = createReducer('', {
-  [changeFilter]: (_, { payload }) => payload.toLowerCase(),
+  [changeFilter]: (_, { payload }) => payload,
 });
 
 const loadings = createReducer(false, {
