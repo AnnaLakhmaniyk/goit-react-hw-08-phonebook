@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { useCreateContactMutation } from 'redux/contactsApi';
 import { nanoid } from 'nanoid';
 import { toast } from 'react-toastify';
 import { FaPhoneAlt } from 'react-icons/fa';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { createContact } from 'redux/contacts/contacts-operation';
+import { getContacts } from 'redux/contacts/contacts-selectors';
+
 import s from './ContactForm.module.css';
 
-const ContactForm = ({ contacts }) => {
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [createContact, { isLoading }] = useCreateContactMutation();
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
   const keyEl = nanoid();
 
   const handleChange = evt => {
@@ -39,7 +42,7 @@ const ContactForm = ({ contacts }) => {
       reset();
       return;
     }
-    createContact(contactEl);
+    dispatch(createContact(contactEl));
 
     reset();
   };
@@ -74,13 +77,11 @@ const ContactForm = ({ contacts }) => {
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         required
       />
-      <button type="submit" className={s.button} disabled={isLoading}>
+      <button type="submit" className={s.button}>
         <FaPhoneAlt size="15" fill="rgb(25, 22, 22)" /> Add contact
       </button>
     </form>
   );
 };
-ContactForm.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.object),
-};
+
 export default ContactForm;
