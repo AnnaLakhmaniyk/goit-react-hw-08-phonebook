@@ -28,7 +28,6 @@ export const createContact = createAsyncThunk(
   async newContact => {
     try {
       const contact = await axios.post('/contacts', newContact);
-      console.log(contact.data);
       return contact.data;
     } catch (error) {
       toast.error(`oops, something went wrong`);

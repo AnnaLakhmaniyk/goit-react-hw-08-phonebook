@@ -4,7 +4,7 @@ import { getContacts, getFilter } from 'redux/contacts/contacts-selectors';
 import { FaTrashAlt } from 'react-icons/fa';
 import s from './ContactList.module.css';
 
-function ContactList({ contactsEl }) {
+function ContactList() {
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
@@ -25,7 +25,7 @@ function ContactList({ contactsEl }) {
 
   return (
     <>
-      {contactOnFilter ? (
+      {contactOnFilter?.length ? (
         <ul className={s.list}>
           {contactOnFilter.map(({ id, name, number }) => (
             <li key={id} className={s.item}>
