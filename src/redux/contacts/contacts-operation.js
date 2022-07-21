@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 export const getContact = createAsyncThunk('contacts/getContacts', async () => {
@@ -6,7 +7,7 @@ export const getContact = createAsyncThunk('contacts/getContacts', async () => {
     const { data } = await axios.get('/contacts');
     return data;
   } catch (error) {
-    // TODO: Добавить обработку ошибки error.message
+    toast.error(`oops, something went wrong`);
   }
 });
 
@@ -17,7 +18,7 @@ export const deleteContact = createAsyncThunk(
       const contact = await axios.delete(`/contacts/${idContact}`);
       return contact;
     } catch (error) {
-      // TODO: Добавить обработку ошибки error.message
+      toast.error(`oops, something went wrong`);
     }
   }
 );
@@ -30,7 +31,7 @@ export const createContact = createAsyncThunk(
       console.log(contact.data);
       return contact.data;
     } catch (error) {
-      // TODO: Добавить обработку ошибки error.message
+      toast.error(`oops, something went wrong`);
     }
   }
 );
