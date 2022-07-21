@@ -1,25 +1,33 @@
-import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getContact, deleteContact } from 'redux/contacts/contacts-operation';
-// import { getVisibleContact } from 'redux/contacts/contacts-selectors';
+import { deleteContact } from 'redux/contacts/contacts-operation';
+import { getContacts, getFilter } from 'redux/contacts/contacts-selectors';
 import { FaTrashAlt } from 'react-icons/fa';
 import s from './ContactList.module.css';
 
-function ContactList() {
+function ContactList({ contactsEl }) {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contact.items);
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
   // console.log(contacts);
-  const onDeleteTodo = id => dispatch(deleteContact(id));
 
-  useEffect(() => {
-    dispatch(getContact());
-  }, [dispatch]);
+  const filterContacts = () => {
+    const normalizedString = filter?.toLowerCase();
+
+    return filter
+      ? contacts?.filter(contact =>
+          contact.name.toLowerCase().includes(normalizedString)
+        )
+      : contacts;
+  };
+
+  const onDeleteTodo = id => dispatch(deleteContact(id));
+  const contactOnFilter = filterContacts();
 
   return (
     <>
-      {contacts ? (
+      {contactOnFilter ? (
         <ul className={s.list}>
-          {contacts.map(({ id, name, number }) => (
+          {contactOnFilter.map(({ id, name, number }) => (
             <li key={id} className={s.item}>
               <p className={s.text}>
                 {name}:{number}
