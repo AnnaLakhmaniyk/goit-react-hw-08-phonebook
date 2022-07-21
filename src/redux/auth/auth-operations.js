@@ -1,5 +1,8 @@
 import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 
 axios.defaults.baseURL = 'https://connections-api.herokuapp.com';
 const token = {
@@ -12,12 +15,15 @@ const token = {
 };
 
 export const register = createAsyncThunk('auth/register', async user => {
+  // const navigate = useNavigate();
   try {
     const { data } = await axios.post('/users/signup', user);
     token.set(data.token);
     return data;
   } catch (error) {
-    // TODO: Добавить обработку ошибки error.message
+    toast.error(`such a user already exists`);
+    // navigate('login', { replace: true });
+    // return <Navigate to="/login" />;
   }
 });
 
@@ -28,7 +34,7 @@ export const logIn = createAsyncThunk('auth/login', async user => {
     token.set(data.token);
     return data;
   } catch (error) {
-    // TODO: Добавить обработку ошибки error.message
+    toast.error(`oops, something went wrong`);
   }
 });
 
@@ -37,7 +43,7 @@ export const logOut = createAsyncThunk('auth/logout', async () => {
     await axios.post('/users/logout');
     token.unset();
   } catch (error) {
-    // TODO: Добавить обработку ошибки error.message
+    toast.error(`oops, something went wrong`);
   }
 });
 
@@ -48,7 +54,6 @@ export const fetchCurrentUser = createAsyncThunk(
     const persistedToken = state.auth.token;
 
     if (persistedToken === null) {
-      console.log('Токена нет, уходим из fetchCurrentUser');
       return thunkAPI.rejectWithValue();
     }
 
@@ -57,7 +62,7 @@ export const fetchCurrentUser = createAsyncThunk(
       const { data } = await axios.get('/users/current');
       return data;
     } catch (error) {
-      // TODO: Добавить обработку ошибки error.message
+      toast.error(`oops, something went wrong`);
     }
   }
 );
