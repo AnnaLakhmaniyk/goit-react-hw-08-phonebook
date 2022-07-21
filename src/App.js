@@ -6,8 +6,10 @@ import { ToastContainer } from 'react-toastify';
 import { fetchCurrentUser } from 'redux/auth/auth-operations';
 import 'react-toastify/dist/ReactToastify.css';
 import AppBar from 'components/AppBar/AppBar';
+import PrivateRoute from 'components/Routes/PrivateRoute';
+import PublicRoute from 'components/Routes/PublicRoute';
+import Loader from 'components/Loder/Loader';
 
-// const Home = lazy(() => import('pages/Home/Home'));
 const ContactView = lazy(() => import('vievs/ContactView'));
 const RegisterView = lazy(() => import('vievs/RegisterView'));
 const LoginView = lazy(() => import('vievs/LoginView'));
@@ -20,14 +22,41 @@ const App = () => {
   }, [dispatch]);
   return (
     <div>
-      <Suspense>
+      <Suspense fallback={<Loader />}>
         <AppBar />
         <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
-          <Route path="/contacts" element={<ContactView />} />
-          <Route path="/register" element={<RegisterView />} />
-          <Route path="/login" element={<LoginView />} />
-          {/* <Route path="*" element={<Home />} /> */}
+          <Route
+            path="/contacts"
+            element={
+              <PrivateRoute>
+                <ContactView />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <RegisterView />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <LoginView />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <PublicRoute>
+                <LoginView />
+              </PublicRoute>
+            }
+          />
         </Routes>
         <ToastContainer autoClose={3000} />
       </Suspense>
