@@ -43,6 +43,7 @@ export default function RegisterView() {
             name="name"
             value={name}
             onChange={handleChange}
+            required
           />
         </label>
 
@@ -54,6 +55,7 @@ export default function RegisterView() {
             name="email"
             value={email}
             onChange={handleChange}
+            required
           />
         </label>
 
@@ -65,6 +67,7 @@ export default function RegisterView() {
             name="password"
             value={password}
             onChange={handleChange}
+            required
           />
         </label>
 
