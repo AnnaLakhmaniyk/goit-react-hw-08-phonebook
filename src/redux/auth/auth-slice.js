@@ -15,12 +15,16 @@ const authSlice = createSlice({
       state.user = payload.user;
       state.token = payload.token;
       state.isLoggedIn = true;
+      state.eror = false;
     },
+
     [logIn.fulfilled](state, action) {
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isLoggedIn = true;
+      state.eror = false;
     },
+
     [logOut.fulfilled](state) {
       state.user = { name: null, email: null };
       state.token = null;
