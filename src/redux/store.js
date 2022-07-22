@@ -2,6 +2,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { rootReducer } from './contacts/contacts-reducer';
+import { errorReducer } from './auth/auth-reducer';
+// import { authSliceEl } from './auth/auth-slice';
+// import { errorSliceEl } from './auth/auth-slice';
 import authSlice from './auth/auth-slice';
 
 const persistConfig = {
@@ -15,6 +18,7 @@ export const store = configureStore({
   reducer: {
     auth: persistReducer(persistConfig, authSlice),
     contact: rootReducer,
+    eror: errorReducer,
   },
   middleware: getDefaultMiddleware => [
     ...getDefaultMiddleware({ serializableCheck: false }),
