@@ -1,6 +1,5 @@
 import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
-// import { Navigate } from 'react-router-dom';
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 
@@ -14,38 +13,43 @@ const token = {
   },
 };
 
-export const register = createAsyncThunk('auth/register', async user => {
-  // const navigate = useNavigate();
-  try {
-    const { data } = await axios.post('/users/signup', user);
-    token.set(data.token);
-    return data;
-  } catch (error) {
-    toast.error(`such a user already exists`);
-    // navigate('login', { replace: true });
-    // return <Navigate to="/login" />;
+export const register = createAsyncThunk(
+  'auth/register',
+  async (user, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post('/users/signup', user);
+      token.set(data.token);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
-});
+);
 
-export const logIn = createAsyncThunk('auth/login', async user => {
-  try {
-    const { data } = await axios.post('/users/login', user);
-    console.log(data);
-    token.set(data.token);
-    return data;
-  } catch (error) {
-    toast.error(`oops, something went wrong`);
+export const logIn = createAsyncThunk(
+  'auth/login',
+  async (user, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post('/users/login', user);
+      token.set(data.token);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
-});
+);
 
-export const logOut = createAsyncThunk('auth/logout', async () => {
-  try {
-    await axios.post('/users/logout');
-    token.unset();
-  } catch (error) {
-    toast.error(`oops, something went wrong`);
+export const logOut = createAsyncThunk(
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      await axios.post('/users/logout');
+      token.unset();
+    } catch (error) {
+      return rejectWithValue(toast.error(`oops, something went wrong`));
+    }
   }
-});
+);
 
 export const fetchCurrentUser = createAsyncThunk(
   'auth/refresh',
@@ -62,7 +66,9 @@ export const fetchCurrentUser = createAsyncThunk(
       const { data } = await axios.get('/users/current');
       return data;
     } catch (error) {
-      toast.error(`oops, something went wrong`);
+      return thunkAPI.rejectWithValue(
+        toast.error(`oops, something went wrong`)
+      );
     }
   }
 );
