@@ -1,12 +1,27 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetError } from 'redux/auth/auh-actions';
+import { useNavigate } from 'react-router-dom';
 import { logIn } from 'redux/auth/auth-operations';
+import { getError } from 'redux/auth/auth-selectors';
+import { toast } from 'react-toastify';
+
 import s from './Vievs.module.css';
 
 export default function LoginView() {
   const dispatch = useDispatch();
+  const erorSel = useSelector(getError);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (erorSel) {
+      toast.error(`user not found`);
+      navigate('/register');
+      dispatch(resetError());
+    }
+  });
 
   const handleChange = ({ target: { name, value } }) => {
     switch (name) {
